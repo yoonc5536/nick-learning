@@ -60,8 +60,8 @@
   <a class="back" href="../../">← Nick's Hub</a> &nbsp;·&nbsp; <a class="back" href="../">🧩 All Toys</a>
   <header class="hero">
     <h1>🧲 Magnetic Tiles</h1>
-    <p>Watch a video, copy the build, then tap <b>“I built it!”</b> — how many of the 22 can you build?</p>
-    <div class="progress"><div class="label" id="plabel">🏆 I built 0 of 22</div><div class="bar"><div id="pfill"></div></div></div>
+    <p>Watch a video, copy the build, then tap <b>“I built it!”</b> — how many of the 21 can you build?</p>
+    <div class="progress"><div class="label" id="plabel">🏆 I built 0 of 21</div><div class="bar"><div id="pfill"></div></div></div>
   </header>
   <div class="tools">
     <nav class="chips"><a class="chip" href="#basics">🏠 Basics &amp; First Builds</a><a class="chip" href="#ramps">🏎️ Car Ramps &amp; Garages</a><a class="chip" href="#ballrun">🔮 Ball Run &amp; Marble Run</a><a class="chip" href="#domino">🁢 Domino &amp; Chain Reactions</a><a class="chip" href="#vehicles">🚀 Vehicles — Rocket, Plane &amp; Helicopter</a><a class="chip" href="#animals">🎡 Animals &amp; Ferris Wheel</a></nav>
@@ -232,7 +232,7 @@
     </div>
   </section>
   <section id="ballrun">
-    <h2 class="cat">🔮 Ball Run &amp; Marble Run <span class="count">4 videos</span></h2>
+    <h2 class="cat">🔮 Ball Run &amp; Marble Run <span class="count">3 videos</span></h2>
     <p class="catsub">Watch the ball roll, drop and spin all the way down!</p>
     <div class="grid">
         <article class="vcard" data-title="easy magnetic tiles ball run pandamommyteacher">
@@ -262,21 +262,6 @@
             <div class="row">
               <a class="watch" href="https://www.youtube.com/watch?v=3wcc31dPDzk" target="_blank" rel="noopener">▶ Watch on YouTube</a>
               <button class="built" data-vid="3wcc31dPDzk" aria-pressed="false">☐ I built it!</button>
-            </div>
-          </div>
-        </article>
-        <article class="vcard" data-title="picassotiles colorful marble run — 120 pieces marble asmr healing">
-          <a class="thumb" href="https://www.youtube.com/watch?v=cU4ckP0kyoU" target="_blank" rel="noopener" aria-label="Watch on YouTube: PicassoTiles Colorful Marble Run — 120 Pieces">
-            <img loading="lazy" src="https://i.ytimg.com/vi/cU4ckP0kyoU/hqdefault.jpg" alt="PicassoTiles Colorful Marble Run — 120 Pieces" />
-            <span class="play">▶</span>
-          </a>
-          <div class="vbody">
-            <h3><a href="https://www.youtube.com/watch?v=cU4ckP0kyoU" target="_blank" rel="noopener">PicassoTiles Colorful Marble Run — 120 Pieces</a></h3>
-            <p class="chan">📺 Marble ASMR healing</p>
-            <p class="desc">A big 120-piece marble run, with relaxing ball-rolling ASMR sounds.</p>
-            <div class="row">
-              <a class="watch" href="https://www.youtube.com/watch?v=cU4ckP0kyoU" target="_blank" rel="noopener">▶ Watch on YouTube</a>
-              <button class="built" data-vid="cU4ckP0kyoU" aria-pressed="false">☐ I built it!</button>
             </div>
           </div>
         </article>
@@ -440,7 +425,7 @@
 <script>
     const KEY='nick-magnetic-tiles-built-v1';
     let built=new Set(JSON.parse(localStorage.getItem(KEY)||'[]'));
-    const total=22;
+    const total=21;
     function render(){
       document.querySelectorAll('.built').forEach(b=>{
         const on=built.has(b.dataset.vid);
