@@ -53,6 +53,11 @@
     .hidden { display:none !important; }
     .noresults { text-align:center; color:#64748b; padding:24px; display:none; }
     footer { margin-top:56px; text-align:center; color:#94a3b8; font-size:.85rem; }
+    .srcbadge { position:absolute; top:10px; left:10px; background:#1877f2; color:#fff;
+      font-weight:800; font-size:.75rem; padding:4px 10px; border-radius:999px; }
+    .watch.fb { background:#1877f2; }
+    .playhere { background:#eef2ff; border:1px solid #c7d2fe; color:#3730a3; font-weight:800;
+      font-size:.88rem; padding:9px 14px; border-radius:10px; cursor:pointer; }
 </style>
 </head>
 <body>
@@ -60,8 +65,8 @@
   <a class="back" href="../../">← Nick's Hub</a> &nbsp;·&nbsp; <a class="back" href="../">🧩 All Toys</a>
   <header class="hero">
     <h1>🧲 Magnetic Tiles</h1>
-    <p>Watch a video, copy the build, then tap <b>“I built it!”</b> — how many of the 21 can you build?</p>
-    <div class="progress"><div class="label" id="plabel">🏆 I built 0 of 21</div><div class="bar"><div id="pfill"></div></div></div>
+    <p>Watch a video, copy the build, then tap <b>“I built it!”</b> — how many of the 22 can you build?</p>
+    <div class="progress"><div class="label" id="plabel">🏆 I built 0 of 22</div><div class="bar"><div id="pfill"></div></div></div>
   </header>
   <div class="tools">
     <nav class="chips"><a class="chip" href="#basics">🏠 Basics &amp; First Builds</a><a class="chip" href="#ramps">🏎️ Car Ramps &amp; Garages</a><a class="chip" href="#ballrun">🔮 Ball Run &amp; Marble Run</a><a class="chip" href="#domino">🁢 Domino &amp; Chain Reactions</a><a class="chip" href="#vehicles">🚀 Vehicles — Rocket, Plane &amp; Helicopter</a><a class="chip" href="#animals">🎡 Animals &amp; Ferris Wheel</a></nav>
@@ -319,7 +324,7 @@
     </div>
   </section>
   <section id="vehicles">
-    <h2 class="cat">🚀 Vehicles — Rocket, Plane &amp; Helicopter <span class="count">3 videos</span></h2>
+    <h2 class="cat">🚀 Vehicles — Rocket, Plane &amp; Helicopter <span class="count">4 videos</span></h2>
     <p class="catsub">Build it, then fly it around the room!</p>
     <div class="grid">
         <article class="vcard" data-title="magnetic tiles build ideas | how to build a rocket miraclestoy">
@@ -364,6 +369,22 @@
             <div class="row">
               <a class="watch" href="https://www.youtube.com/watch?v=6WOEQfgjNtQ" target="_blank" rel="noopener">▶ Watch on YouTube</a>
               <button class="built" data-vid="6WOEQfgjNtQ" aria-pressed="false">☐ I built it!</button>
+            </div>
+          </div>
+        </article>
+        <article class="vcard" data-title="build a magnetic tiles airplane pandamommyteacher · facebook reel">
+          <a class="thumb" href="https://www.facebook.com/reel/1888884195618517/" target="_blank" rel="noopener" aria-label="Watch on Facebook: Build a Magnetic Tiles Airplane">
+            <img loading="lazy" src="assets/fb-airplane-reel.jpg" alt="Build a Magnetic Tiles Airplane" style="object-position:center 32%" />
+            <span class="play">▶</span><span class="srcbadge">Facebook Reel</span>
+          </a>
+          <div class="vbody">
+            <h3><a href="https://www.facebook.com/reel/1888884195618517/" target="_blank" rel="noopener">Build a Magnetic Tiles Airplane</a></h3>
+            <p class="chan">📘 Pandamommyteacher · Facebook Reel</p>
+            <p class="desc">A yellow magnetic-tile airplane with two little mouse pilots. A fun, creative STEM build to copy — ready for takeoff!</p>
+            <div class="row">
+              <a class="watch fb" href="https://www.facebook.com/reel/1888884195618517/" target="_blank" rel="noopener">▶ Watch on Facebook</a>
+              <button class="playhere" data-embed="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1888884195618517%2F&show_text=false&width=560&t=0">▶ Play here</button>
+              <button class="built" data-vid="fb-1888884195618517" aria-pressed="false">☐ I built it!</button>
             </div>
           </div>
         </article>
@@ -425,7 +446,7 @@
 <script>
     const KEY='nick-magnetic-tiles-built-v1';
     let built=new Set(JSON.parse(localStorage.getItem(KEY)||'[]'));
-    const total=21;
+    const total=22;
     function render(){
       document.querySelectorAll('.built').forEach(b=>{
         const on=built.has(b.dataset.vid);
@@ -440,6 +461,15 @@
       localStorage.setItem(KEY,JSON.stringify([...built])); render();
     }));
     render();
+    document.querySelectorAll('.playhere').forEach(b=>b.addEventListener('click',()=>{
+      const th=b.closest('.vcard').querySelector('.thumb');
+      const ifr=document.createElement('iframe');
+      ifr.src=b.dataset.embed; ifr.title='Facebook video player';
+      ifr.style.cssText='width:100%;height:100%;border:0;position:absolute;inset:0';
+      ifr.setAttribute('allowfullscreen','true');
+      ifr.setAttribute('allow','autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share');
+      th.innerHTML=''; th.appendChild(ifr); b.remove();
+    }));
     const q=document.getElementById('q');
     q.addEventListener('input',()=>{
       const s=q.value.trim().toLowerCase(); let any=false;
