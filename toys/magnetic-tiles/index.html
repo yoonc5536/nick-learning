@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Magnetic Tiles · Nick's Play &amp; Learning Hub</title>
+<style>
+    * { box-sizing: border-box; }
+    body { font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0; background: #f4f7fb; color: #1e293b; }
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 28px 20px 70px; }
+    a.back { color:#2563eb; text-decoration:none; font-weight:700; font-size:.95rem; }
+    header.hero { text-align:center; padding: 26px 10px 6px; }
+    header.hero h1 { font-size: 2.3rem; margin: 0 0 8px; }
+    header.hero p { color:#64748b; font-size:1.05rem; margin:0 auto; max-width:700px; }
+    .progress { max-width:520px; margin:22px auto 4px; background:#fff; border:1px solid #e2e8f0;
+      border-radius:14px; padding:14px 18px; box-shadow:0 2px 10px rgba(30,41,59,.06); }
+    .progress .label { font-weight:800; font-size:.95rem; margin-bottom:8px; }
+    .bar { height:14px; background:#e2e8f0; border-radius:999px; overflow:hidden; }
+    .bar > div { height:100%; width:0%; background:linear-gradient(90deg,#f59e0b,#ef4444,#3b82f6,#22c55e); transition:width .3s; }
+    .tools { position: sticky; top:0; z-index:5; background:#f4f7fb; padding:14px 0 10px; }
+    .chips { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
+    .chip { background:#fff; border:1px solid #cbd5e1; color:#334155; text-decoration:none;
+      font-weight:700; font-size:.88rem; padding:7px 13px; border-radius:999px; }
+    .chip:hover { border-color:#3b82f6; color:#1d4ed8; }
+    .search { display:block; width:100%; max-width:520px; margin:12px auto 0; padding:11px 16px;
+      font-size:1rem; border:1px solid #cbd5e1; border-radius:999px; background:#fff; }
+    h2.cat { font-size:1.55rem; margin:44px 0 4px; scroll-margin-top:120px; }
+    h2.cat .count { font-size:.85rem; color:#64748b; font-weight:700; background:#e2e8f0; padding:3px 10px; border-radius:999px; vertical-align:middle; }
+    .catsub { color:#64748b; margin:0 0 16px; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:18px; }
+    .vcard { background:#fff; border-radius:16px; overflow:hidden; border:1px solid #e2e8f0;
+      box-shadow:0 2px 10px rgba(30,41,59,.07); display:flex; flex-direction:column; }
+    .vcard.done { outline:3px solid #22c55e; }
+    .thumb { position:relative; display:block; aspect-ratio:16/9; background:#0f172a; }
+    .thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+    .thumb .play { position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+      font-size:2rem; color:#fff; text-shadow:0 2px 10px rgba(0,0,0,.6); }
+    .thumb .play::before { content:""; position:absolute; width:64px; height:64px; border-radius:50%;
+      background:rgba(239,68,68,.92); z-index:-1; }
+    .vbody { padding:16px 18px 18px; display:flex; flex-direction:column; gap:6px; flex:1; }
+    .vbody h3 { margin:0; font-size:1.05rem; line-height:1.35; }
+    .vbody h3 a { color:inherit; text-decoration:none; }
+    .vbody h3 a:hover { color:#1d4ed8; }
+    .chan { margin:0; color:#475569; font-weight:700; font-size:.87rem; }
+    .desc { margin:0; color:#64748b; font-size:.92rem; flex:1; }
+    .row { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+    .watch { background:#ef4444; color:#fff; text-decoration:none; font-weight:800; font-size:.88rem;
+      padding:9px 14px; border-radius:10px; }
+    .built { background:#f1f5f9; border:1px solid #cbd5e1; color:#334155; font-weight:800; font-size:.88rem;
+      padding:9px 14px; border-radius:10px; cursor:pointer; }
+    .built[aria-pressed="true"] { background:#dcfce7; border-color:#22c55e; color:#166534; }
+    .hidden { display:none !important; }
+    .noresults { text-align:center; color:#64748b; padding:24px; display:none; }
+    footer { margin-top:56px; text-align:center; color:#94a3b8; font-size:.85rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../">← Nick's Hub</a> &nbsp;·&nbsp; <a class="back" href="../">🧩 All Toys</a>
+  <header class="hero">
+    <h1>🧲 Magnetic Tiles</h1>
+    <p>Watch a video, copy the build, then tap <b>“I built it!”</b> — how many of the 22 can you build?</p>
+    <div class="progress"><div class="label" id="plabel">🏆 I built 0 of 22</div><div class="bar"><div id="pfill"></div></div></div>
+  </header>
+  <div class="tools">
+    <nav class="chips"><a class="chip" href="#basics">🏠 Basics &amp; First Builds</a><a class="chip" href="#ramps">🏎️ Car Ramps &amp; Garages</a><a class="chip" href="#ballrun">🔮 Ball Run &amp; Marble Run</a><a class="chip" href="#domino">🁢 Domino &amp; Chain Reactions</a><a class="chip" href="#vehicles">🚀 Vehicles — Rocket, Plane &amp; Helicopter</a><a class="chip" href="#animals">🎡 Animals &amp; Ferris Wheel</a></nav>
+    <input class="search" id="q" type="search" placeholder="🔍 Search builds… (rocket, castle, car, animals)" aria-label="Search builds" />
+  </div>
+  <div class="noresults" id="noresults">No builds match that search — try another word!</div>
+
+  <section id="basics">
+    <h2 class="cat">🏠 Basics &amp; First Builds <span class="count">6 videos</span></h2>
+    <p class="catsub">Houses, castles, bridges and rainbows — start here!</p>
+    <div class="grid">
+        <article class="vcard" data-title="10 simple magnetic tile builds parents and kids will love yanyi">
+          <a class="thumb" href="https://www.youtube.com/watch?v=f7q95cmS3R4" target="_blank" rel="noopener" aria-label="Watch on YouTube: 10 Simple Magnetic Tile Builds Parents and Kids Will Love">
+            <img loading="lazy" src="https://i.ytimg.com/vi/f7q95cmS3R4/hqdefault.jpg" alt="10 Simple Magnetic Tile Builds Parents and Kids Will Love" />
+            <span class="play">▶</span>
+          </a>
+          <div class="vbody">
+            <h3><a href="https://www.youtube.com/watch?v=f7q95cmS3R4" target="_blank" rel="noopener">10 Simple Magnetic Tile Builds Parents and Kids Will Love</a></h3>
+            <p class="chan">📺 Yanyi</p>
+            <p class="desc">10 easy starter builds that parents and kids can copy together.</p>
+            <div class="row">
+              <a class="watch" href="https://www.youtube.com/watch?v=f7q95cmS3R4" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+              <button class="built" data-vid="f7q95cmS3R4" aria-pressed="false">☐ I built it!</button>
+            </div>
+          </div>
+        </article>
+        <article class="vcard" data-title="3 simple builds with magna-tiles®: house, rainbow, bridge magna-tiles®">
+          <a class="thumb" href="https://www.youtube.com/watch?v=Of2KvwfVKq0" target="_blank" rel="noopener" aria-label="Watch on YouTube: 3 Simple Builds with MAGNA-TILES®: House, Rainbow, Bridge">
+            <img loading="lazy" src="https://i.ytimg.com/vi/Of2KvwfVKq0/hqdefault.jpg" alt="3 Simple Builds with MAGNA-TILES®: House, Rainbow, Bridge" />
+            <span class="play">▶</span>
+          </a>
+          <div class="vbody">
+            <h3><a href="https://www.youtube.com/watch?v=Of2KvwfVKq0" target="_blank" rel="noopener">3 Simple Builds with MAGNA-TILES®: House, Rainbow, Bridge</a></h3>
+            <p class="chan">📺 MAGNA-TILES®</p>
+            <p class="desc">The classic first three: a house, a rainbow, and a 3D bridge.</p>
+            <div class="row">
+              <a class="watch" href="https://www.youtube.com/watch?v=Of2KvwfVKq0" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+              <button class="built" data-vid="Of2KvwfVKq0" aria-pressed="false">☐ I built it!</button>
+            </div>
+          </div>
+        </article>
+        <article class="vcard" data-title="3 builds with the magna-tiles® city center set: house, bridge, castle magna-tiles®">
+          <a class="thumb" href="https://www.youtube.com/watch?v=SkeJ7C0ScJU" target="_blank" rel="noopener" aria-label="Watch on YouTube: 3 Builds with the MAGNA-TILES® City Center Set: House, Bridge, Castle">
+            <img loading="lazy" src="https://i.ytimg.com/vi/SkeJ7C0ScJU/hqdefault.jpg" alt="3 Builds with the MAGNA-TILES® City Center Set: House, Bridge, Castle" />
+            <span class="play">▶</span>
+          </a>
+          <div class="vbody">
+            <h3><a href="https://www.youtube.com/watch?v=SkeJ7C0ScJU" target="_blank" rel="noopener">3 Builds with the MAGNA-TILES® City Center Set: House, Bridge, Castle</a></h3>
+            <p class="chan">📺 MAGNA-TILES®</p>
+            <p class="desc">Use the City Center set to finish a house, a long bridge, and a fancy castle.</p>
+            <div class="row">
+              <a class="watch" href="https://www.youtube.com/watch?v=SkeJ7C0ScJU" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+              <button class="built" data-vid="SkeJ7C0ScJU" aria-pressed="false">☐ I built it!</button>
+            </div>
+          </div>
+        </article>
+        <article class="vcard" data-title="3 magna-tiles® builds in 15 seconds magna-tiles®">
+          <a class="thumb" href="https://www.youtube.com/watch?v=-Yui8D1rWZM" target="_blank" rel="noopener" aria-label="Watch on YouTube: 3 MAGNA-TILES® Builds in 15 Seconds">
+            <img loading="lazy" src="https://i.ytimg.com/vi/-Yui8D1rWZM/hqdefault.jpg" alt="3 MAGNA-TILES® Builds in 15 Seconds" />
+            <span class="play">▶</span>
+          </a>
+          <div class="vbody">
+            <h3><a href="https://www.youtube.com/watch?v=-Yui8D1rWZM" target="_blank" rel="noopener">3 MAGNA-TILES® Builds in 15 Seconds</a></h3>
+            <p class="chan">📺 MAGNA-TILES®</p>
+            <p class="desc">Three fun structures, each shown super-fast in just 15 seconds.</p>
+            <div class="row">
+              <a class="watch" href="https://www.youtube.com/watch?v=-Yui8D1rWZM" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+              <button class="built" data-vid="-Yui8D1rWZM" aria-pressed="false">☐ I built it!</button>
+            </div>
+          </div>
+        </article>
+        <article class="vcard" data-title="build a bridge with magna-tiles engineer henry! magna-tiles®">
+          <a class="thumb" href="https://www.youtube.com/watch?v=CtLpli_JOD8" target="_blank" rel="noopener" aria-label="Watch on YouTube: Build a Bridge with MAGNA-TILES Engineer Henry!">
+            <img loading="lazy" src="https://i.ytimg.com/vi/CtLpli_JOD8/hqdefault.jpg" alt="Build a Bridge with MAGNA-TILES Engineer Henry!" />
+            <span class="play">▶</span>
+          </a>
+          <div class="vbody">
+            <h3><a href="https://www.youtube.com/watch?v=CtLpli_JOD8" target="_blank" rel="noopener">Build a Bridge with MAGNA-TILES Engineer Henry!</a></h3>
+            <p class="chan">📺 MAGNA-TILES®</p>
+            <p class="desc">Engineering tips for a strong arch bridge that can hold weight.</p>
+            <div class="row">
+              <a class="watch" href="https://www.youtube.com/watch?v=CtLpli_JOD8" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+              <button class="built" data-vid="CtLpli_JOD8" aria-pressed="false">☐ I built it!</button>
+            </div>
+          </div>
+        </article>
+        <article class="vcard" data-title="simple magnetic tiles rainbow arch tutorial giggle &amp; grow with gauravi | learn through play">
+          <a class="thumb" href="https://www.youtube.com/watch?v=jeYIqbFpYOg" target="_blank" rel="noopener" aria-label="Watch on YouTube: Simple Magnetic Tiles Rainbow Arch Tutorial">
+            <img loading="lazy" src="https://i.ytimg.com/vi/jeYIqbFpYOg/hqdefault.jpg" alt="Simple Magnetic Tiles Rainbow Arch Tutorial" />
+            <span class="play">▶</span>
+          </a>
+          <div class="vbody">
+            <h3><a href="https://www.youtube.com/watch?v=jeYIqbFpYOg" target="_blank" rel="noopener">Simple Magnetic Tiles Rainbow Arch Tutorial</a></h3>
+            <p class="chan">📺 Giggle &amp; Grow with Gauravi | Learn Through Play</p>
+            <p class="desc">Make a pretty rainbow arch tunnel with colorful tiles.</p>
+            <div class="row">
+              <a class="watch" href="https://www.youtube.com/watch?v=jeYIqbFpYOg" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+              <button class="built" data-vid="jeYIqbFpYOg" aria-pressed="false">☐ I built it!</button>
+            </div>
+          </div>
+        </article>
+    </div>
+  </section>
+  <section id="ramps">
+    <h2 class="cat">🏎️ Car Ramps &amp; Garages <span class="count">4 videos</span></h2>
+    <p class="catsub">Ramps, race tracks and parking garages for mini cars</p>
+    <div class="grid">
+        <article class="vcard" data-title="magna-tiles car ramp magna-tiles®">
+          <a class="thumb" href="https://www.youtube.com/watch?v=Yzrq7W0nYcs" target="_blank" rel="noopener" aria-label="Watch on YouTube: MAGNA-TILES Car Ramp">
+            <img loading="lazy" src="https://i.ytimg.com/vi/Yzrq7W0nYcs/hqdefault.jpg" alt="MAGNA-TILES Car Ramp" />
+            <span class="play">▶</span>
+          </a>
+          <div class="vbody">
+            <h3><a href="https://www.youtube.com/watch?v=Yzrq7W0nYcs" target="_blank" rel="noopener">MAGNA-TILES Car Ramp</a></h3>
+            <p class="chan">📺 MAGNA-TILES®</p>
+            <p class="desc">A speedy downhill ramp racing track for mini cars.</p>
+            <div class="row">
+              <a class="watch" href="https://www.youtube.com/watch?v=Yzrq7W0nYcs" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+              <button class="built" data-vid="Yzrq7W0nYcs" aria-pressed="false">☐ I built it!</button>
+            </div>
+          </div>
+        </article>
+        <article class="vcard" data-title="dual track reverse magnetic tiles ramp pandamommyteacher">
+          <a class="thumb" href="https://www.youtube.com/watch?v=Q2ZEeJCvRnY" target="_blank" rel="noopener" aria-label="Watch on YouTube: Dual Track Reverse Magnetic Tiles Ramp">
+            <img loading="lazy" src="https://i.ytimg.com/vi/Q2ZEeJCvRnY/hqdefault.jpg" alt="Dual Track Reverse Magnetic Tiles Ramp" />
+            <span class="play">▶</span>
+          </a>
+          <div class="vbody">
+            <h3><a href="https://www.youtube.com/watch?v=Q2ZEeJCvRnY" target="_blank" rel="noopener">Dual Track Reverse Magnetic Tiles Ramp</a></h3>
+            <p class="chan">📺 Pandamommyteacher</p>
+            <p class="desc">A double zig-zag track where balls and cars roll down in reverse turns.</p>
+            <div class="row">
+              <a class="watch" href="https://www.youtube.com/watch?v=Q2ZEeJCvRnY" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+              <button class="built" data-vid="Q2ZEeJCvRnY" aria-pressed="false">☐ I built it!</button>
+            </div>
+          </div>
+        </article>
+        <article class="vcard" data-title="circular magnetic tiles car garage / ball ramp pandamommyteacher">
+          <a class="thumb" href="https://www.youtube.com/watch?v=m3RnVTC1QgM" target="_blank" rel="noopener" aria-label="Watch on YouTube: Circular Magnetic Tiles Car Garage / Ball Ramp">
+            <img loading="lazy" src="https://i.ytimg.com/vi/m3RnVTC1QgM/hqdefault.jpg" alt="Circular Magnetic Tiles Car Garage / Ball Ramp" />
+            <span class="play">▶</span>
+          </a>
+          <div class="vbody">
+            <h3><a href="https://www.youtube.com/watch?v=m3RnVTC1QgM" target="_blank" rel="noopener">Circular Magnetic Tiles Car Garage / Ball Ramp</a></h3>
+            <p class="chan">📺 Pandamommyteacher</p>
+            <p class="desc">A round tower that is both a parking garage and a ball ramp.</p>
+            <div class="row">
+              <a class="watch" href="https://www.youtube.com/watch?v=m3RnVTC1QgM" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+              <button class="built" data-vid="m3RnVTC1QgM" aria-pressed="false">☐ I built it!</button>
+            </div>
+          </div>
+        </article>
+        <article class="vcard" data-title="mini garage magnetic tiles ramp pandamommyteacher">
+          <a class="thumb" href="https://www.youtube.com/watch?v=2qlAj_cq9Es" target="_blank" rel="noopener" aria-label="Watch on YouTube: Mini Garage Magnetic Tiles Ramp">
+            <img loading="lazy" src="https://i.ytimg.com/vi/2qlAj_cq9Es/hqdefault.jpg" alt="Mini Garage Magnetic Tiles Ramp" />
+            <span class="play">▶</span>
+          </a>
+          <div class="vbody">
+            <h3><a href="https://www.youtube.com/watch?v=2qlAj_cq9Es" target="_blank" rel="noopener">Mini Garage Magnetic Tiles Ramp</a></h3>
+            <p class="chan">📺 Pandamommyteacher</p>
+            <p class="desc">A cute mini car garage connected to its own slope.</p>
+            <div class="row">
+              <a class="watch" href="https://www.youtube.com/watch?v=2qlAj_cq9Es" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+              <button class="built" data-vid="2qlAj_cq9Es" aria-pressed="false">☐ I built it!</button>
+            </div>
+          </div>
+        </article>
+    </div>
+  </section>
+  <section id="ballrun">
+    <h2 class="cat">🔮 Ball Run &amp; Marble Run <span class="count">4 videos</span></h2>
+    <p class="catsub">Watch the ball roll, drop and spin all the way down!</p>
+    <div class="grid">
+        <article class="vcard" data-title="easy magnetic tiles ball run pandamommyteacher">
+          <a class="thumb" href="https://www.youtube.com/watch?v=fBB4hstPefE" target="_blank" rel="noopener" aria-label="Watch on YouTube: Easy Magnetic Tiles Ball Run">
+            <img loading="lazy" src="https://i.ytimg.com/vi/fBB4hstPefE/hqdefault.jpg" alt="Easy Magnetic Tiles Ball Run" />
+            <span class="play">▶</span>
+          </a>
+          <div class="vbody">
+            <h3><a href="https://www.youtube.com/watch?v=fBB4hstPefE" target="_blank" rel="noopener">Easy Magnetic Tiles Ball Run</a></h3>
+            <p class="chan">📺 Pandamommyteacher</p>
+            <p class="desc">A smooth, curvy ball run that beginners can build easily.</p>
+            <div class="row">
+              <a class="watch" href="https://www.youtube.com/watch?v=fBB4hstPefE" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+              <button class="built" data-vid="fBB4hstPefE" aria-pressed="false">☐ I built it!</button>
+            </div>
+          </div>
+        </article>
+        <article class="vcard" data-title="mntl magnetic tiles marble run tower koko and miko">
+          <a class="thumb" href="https://www.youtube.com/watch?v=3wcc31dPDzk" target="_blank" rel="noopener" aria-label="Watch on YouTube: MNTL Magnetic Tiles Marble Run Tower">
+            <img loading="lazy" src="https://i.ytimg.com/vi/3wcc31dPDzk/hqdefault.jpg" alt="MNTL Magnetic Tiles Marble Run Tower" />
+            <span class="play">▶</span>
+          </a>
+          <div class="vbody">
+            <h3><a href="https://www.youtube.com/watch?v=3wcc31dPDzk" target="_blank" rel="noopener">MNTL Magnetic Tiles Marble Run Tower</a></h3>
+            <p class="chan">📺 Koko and Miko</p>
+            <p class="desc">A tall vertical marble-run tower.</p>
+            <div class="row">
+              <a class="watch" href="https://www.youtube.com/watch?v=3wcc31dPDzk" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+              <button class="built" data-vid="3wcc31dPDzk" aria-pressed="false">☐ I built it!</button>
+            </div>
+          </div>
+        </article>
+        <article class="vcard" data-title="picassotiles colorful marble run — 120 pieces marble asmr healing">
+          <a class="thumb" href="https://www.youtube.com/watch?v=cU4ckP0kyoU" target="_blank" rel="noopener" aria-label="Watch on YouTube: PicassoTiles Colorful Marble Run — 120 Pieces">
+            <img loading="lazy" src="https://i.ytimg.com/vi/cU4ckP0kyoU/hqdefault.jpg" alt="PicassoTiles Colorful Marble Run — 120 Pieces" />
+            <span class="play">▶</span>
+          </a>
+          <div class="vbody">
+            <h3><a href="https://www.youtube.com/watch?v=cU4ckP0kyoU" target="_blank" rel="noopener">PicassoTiles Colorful Marble Run — 120 Pieces</a></h3>
+            <p class="chan">📺 Marble ASMR healing</p>
+            <p class="desc">A big 120-piece marble run, with relaxing ball-rolling ASMR sounds.</p>
+            <div class="row">
+              <a class="watch" href="https://www.youtube.com/watch?v=cU4ckP0kyoU" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+              <button class="built" data-vid="cU4ckP0kyoU" aria-pressed="false">☐ I built it!</button>
+            </div>
+          </div>
+        </article>
+        <article class="vcard" data-title="building a rainbow ball run with magplayer magnetic tiles magplayer">
+          <a class="thumb" href="https://www.youtube.com/watch?v=_yvqp84diHM" target="_blank" rel="noopener" aria-label="Watch on YouTube: Building a Rainbow Ball Run with Magplayer Magnetic Tiles">
+            <img loading="lazy" src="https://i.ytimg.com/vi/_yvqp84diHM/hqdefault.jpg" alt="Building a Rainbow Ball Run with Magplayer Magnetic Tiles" />
+            <span class="play">▶</span>
+          </a>
+          <div class="vbody">
+            <h3><a href="https://www.youtube.com/watch?v=_yvqp84diHM" target="_blank" rel="noopener">Building a Rainbow Ball Run with Magplayer Magnetic Tiles</a></h3>
+            <p class="chan">📺 Magplayer</p>
+            <p class="desc">A vertical ball run in bright rainbow colors.</p>
+            <div class="row">
+              <a class="watch" href="https://www.youtube.com/watch?v=_yvqp84diHM" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+              <button class="built" data-vid="_yvqp84diHM" aria-pressed="false">☐ I built it!</button>
+            </div>
+          </div>
+        </article>
+    </div>
+  </section>
+  <section id="domino">
+    <h2 class="cat">🁢 Domino &amp; Chain Reactions <span class="count">2 videos</span></h2>
+    <p class="catsub">Line them up, tip the first one… and watch them all fall!</p>
+    <div class="grid">
+        <article class="vcard" data-title="level up your magna-tiles domino runs magna-tiles®">
+          <a class="thumb" href="https://www.youtube.com/watch?v=E4GvUsDM1Hw" target="_blank" rel="noopener" aria-label="Watch on YouTube: Level Up Your MAGNA-TILES Domino Runs">
+            <img loading="lazy" src="https://i.ytimg.com/vi/E4GvUsDM1Hw/hqdefault.jpg" alt="Level Up Your MAGNA-TILES Domino Runs" />
+            <span class="play">▶</span>
+          </a>
+          <div class="vbody">
+            <h3><a href="https://www.youtube.com/watch?v=E4GvUsDM1Hw" target="_blank" rel="noopener">Level Up Your MAGNA-TILES Domino Runs</a></h3>
+            <p class="chan">📺 MAGNA-TILES®</p>
+            <p class="desc">Stand tiles up and knock them down in a row — with extra tricks to level it up.</p>
+            <div class="row">
+              <a class="watch" href="https://www.youtube.com/watch?v=E4GvUsDM1Hw" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+              <button class="built" data-vid="E4GvUsDM1Hw" aria-pressed="false">☐ I built it!</button>
+            </div>
+          </div>
+        </article>
+        <article class="vcard" data-title="9 domino builds with connetix magnetic tiles! connetix magnetic tiles">
+          <a class="thumb" href="https://www.youtube.com/watch?v=1S2fdQztaCI" target="_blank" rel="noopener" aria-label="Watch on YouTube: 9 Domino Builds with CONNETIX Magnetic Tiles!">
+            <img loading="lazy" src="https://i.ytimg.com/vi/1S2fdQztaCI/hqdefault.jpg" alt="9 Domino Builds with CONNETIX Magnetic Tiles!" />
+            <span class="play">▶</span>
+          </a>
+          <div class="vbody">
+            <h3><a href="https://www.youtube.com/watch?v=1S2fdQztaCI" target="_blank" rel="noopener">9 Domino Builds with CONNETIX Magnetic Tiles!</a></h3>
+            <p class="chan">📺 CONNETIX Magnetic Tiles</p>
+            <p class="desc">Nine different domino courses with magnetic tiles.</p>
+            <div class="row">
+              <a class="watch" href="https://www.youtube.com/watch?v=1S2fdQztaCI" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+              <button class="built" data-vid="1S2fdQztaCI" aria-pressed="false">☐ I built it!</button>
+            </div>
+          </div>
+        </article>
+    </div>
+  </section>
+  <section id="vehicles">
+    <h2 class="cat">🚀 Vehicles — Rocket, Plane &amp; Helicopter <span class="count">3 videos</span></h2>
+    <p class="catsub">Build it, then fly it around the room!</p>
+    <div class="grid">
+        <article class="vcard" data-title="magnetic tiles build ideas | how to build a rocket miraclestoy">
+          <a class="thumb" href="https://www.youtube.com/watch?v=DLshUleHPKU" target="_blank" rel="noopener" aria-label="Watch on YouTube: Magnetic Tiles Build Ideas | How to Build a Rocket">
+            <img loading="lazy" src="https://i.ytimg.com/vi/DLshUleHPKU/hqdefault.jpg" alt="Magnetic Tiles Build Ideas | How to Build a Rocket" />
+            <span class="play">▶</span>
+          </a>
+          <div class="vbody">
+            <h3><a href="https://www.youtube.com/watch?v=DLshUleHPKU" target="_blank" rel="noopener">Magnetic Tiles Build Ideas | How to Build a Rocket</a></h3>
+            <p class="chan">📺 miraclestoy</p>
+            <p class="desc">A space rocket build kids love.</p>
+            <div class="row">
+              <a class="watch" href="https://www.youtube.com/watch?v=DLshUleHPKU" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+              <button class="built" data-vid="DLshUleHPKU" aria-pressed="false">☐ I built it!</button>
+            </div>
+          </div>
+        </article>
+        <article class="vcard" data-title="magnetic tiles build ideas | how to build a helicopter miraclestoy">
+          <a class="thumb" href="https://www.youtube.com/watch?v=mzYRBotPCjk" target="_blank" rel="noopener" aria-label="Watch on YouTube: Magnetic Tiles Build Ideas | How to Build a Helicopter">
+            <img loading="lazy" src="https://i.ytimg.com/vi/mzYRBotPCjk/hqdefault.jpg" alt="Magnetic Tiles Build Ideas | How to Build a Helicopter" />
+            <span class="play">▶</span>
+          </a>
+          <div class="vbody">
+            <h3><a href="https://www.youtube.com/watch?v=mzYRBotPCjk" target="_blank" rel="noopener">Magnetic Tiles Build Ideas | How to Build a Helicopter</a></h3>
+            <p class="chan">📺 miraclestoy</p>
+            <p class="desc">A 3D helicopter — with a spinning propeller on top!</p>
+            <div class="row">
+              <a class="watch" href="https://www.youtube.com/watch?v=mzYRBotPCjk" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+              <button class="built" data-vid="mzYRBotPCjk" aria-pressed="false">☐ I built it!</button>
+            </div>
+          </div>
+        </article>
+        <article class="vcard" data-title="building a magnetic airplane from scratch! magplayer">
+          <a class="thumb" href="https://www.youtube.com/watch?v=6WOEQfgjNtQ" target="_blank" rel="noopener" aria-label="Watch on YouTube: Building a Magnetic Airplane from Scratch!">
+            <img loading="lazy" src="https://i.ytimg.com/vi/6WOEQfgjNtQ/hqdefault.jpg" alt="Building a Magnetic Airplane from Scratch!" />
+            <span class="play">▶</span>
+          </a>
+          <div class="vbody">
+            <h3><a href="https://www.youtube.com/watch?v=6WOEQfgjNtQ" target="_blank" rel="noopener">Building a Magnetic Airplane from Scratch!</a></h3>
+            <p class="chan">📺 Magplayer</p>
+            <p class="desc">Bring imagination to life with a winged magnetic airplane.</p>
+            <div class="row">
+              <a class="watch" href="https://www.youtube.com/watch?v=6WOEQfgjNtQ" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+              <button class="built" data-vid="6WOEQfgjNtQ" aria-pressed="false">☐ I built it!</button>
+            </div>
+          </div>
+        </article>
+    </div>
+  </section>
+  <section id="animals">
+    <h2 class="cat">🎡 Animals &amp; Ferris Wheel <span class="count">3 videos</span></h2>
+    <p class="catsub">Cute animals, an elephant slide, and a wheel that really spins</p>
+    <div class="grid">
+        <article class="vcard" data-title="magnetic tiles ideas for kids | how to build magnetic tiles animals miraclestoy">
+          <a class="thumb" href="https://www.youtube.com/watch?v=ZSwxkHOYl9M" target="_blank" rel="noopener" aria-label="Watch on YouTube: Magnetic Tiles Ideas for Kids | How to Build Magnetic Tiles Animals">
+            <img loading="lazy" src="https://i.ytimg.com/vi/ZSwxkHOYl9M/hqdefault.jpg" alt="Magnetic Tiles Ideas for Kids | How to Build Magnetic Tiles Animals" />
+            <span class="play">▶</span>
+          </a>
+          <div class="vbody">
+            <h3><a href="https://www.youtube.com/watch?v=ZSwxkHOYl9M" target="_blank" rel="noopener">Magnetic Tiles Ideas for Kids | How to Build Magnetic Tiles Animals</a></h3>
+            <p class="chan">📺 miraclestoy</p>
+            <p class="desc">Build lots of cute animals out of magnetic tiles.</p>
+            <div class="row">
+              <a class="watch" href="https://www.youtube.com/watch?v=ZSwxkHOYl9M" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+              <button class="built" data-vid="ZSwxkHOYl9M" aria-pressed="false">☐ I built it!</button>
+            </div>
+          </div>
+        </article>
+        <article class="vcard" data-title="magnetic tiles build ideas | how to build an elephant slide miraclestoy">
+          <a class="thumb" href="https://www.youtube.com/watch?v=HcB6oIsykng" target="_blank" rel="noopener" aria-label="Watch on YouTube: Magnetic Tiles Build Ideas | How to Build an Elephant Slide">
+            <img loading="lazy" src="https://i.ytimg.com/vi/HcB6oIsykng/hqdefault.jpg" alt="Magnetic Tiles Build Ideas | How to Build an Elephant Slide" />
+            <span class="play">▶</span>
+          </a>
+          <div class="vbody">
+            <h3><a href="https://www.youtube.com/watch?v=HcB6oIsykng" target="_blank" rel="noopener">Magnetic Tiles Build Ideas | How to Build an Elephant Slide</a></h3>
+            <p class="chan">📺 miraclestoy</p>
+            <p class="desc">A slide shaped like an elephant&#x27;s trunk.</p>
+            <div class="row">
+              <a class="watch" href="https://www.youtube.com/watch?v=HcB6oIsykng" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+              <button class="built" data-vid="HcB6oIsykng" aria-pressed="false">☐ I built it!</button>
+            </div>
+          </div>
+        </article>
+        <article class="vcard" data-title="magnetic tiles ideas — how to build a ferris wheel tutorial magblox magnetic tile play ideas">
+          <a class="thumb" href="https://www.youtube.com/watch?v=wzU4VsXUykA" target="_blank" rel="noopener" aria-label="Watch on YouTube: Magnetic Tiles Ideas — How to Build a Ferris Wheel Tutorial">
+            <img loading="lazy" src="https://i.ytimg.com/vi/wzU4VsXUykA/hqdefault.jpg" alt="Magnetic Tiles Ideas — How to Build a Ferris Wheel Tutorial" />
+            <span class="play">▶</span>
+          </a>
+          <div class="vbody">
+            <h3><a href="https://www.youtube.com/watch?v=wzU4VsXUykA" target="_blank" rel="noopener">Magnetic Tiles Ideas — How to Build a Ferris Wheel Tutorial</a></h3>
+            <p class="chan">📺 Magblox Magnetic Tile Play Ideas</p>
+            <p class="desc">A Ferris wheel you can actually spin!</p>
+            <div class="row">
+              <a class="watch" href="https://www.youtube.com/watch?v=wzU4VsXUykA" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+              <button class="built" data-vid="wzU4VsXUykA" aria-pressed="false">☐ I built it!</button>
+            </div>
+          </div>
+        </article>
+    </div>
+  </section>
+  <footer>Made for Nick · Videos on YouTube by their creators · Keep building! 🧲</footer>
+</div>
+<script>
+    const KEY='nick-magnetic-tiles-built-v1';
+    let built=new Set(JSON.parse(localStorage.getItem(KEY)||'[]'));
+    const total=22;
+    function render(){
+      document.querySelectorAll('.built').forEach(b=>{
+        const on=built.has(b.dataset.vid);
+        b.setAttribute('aria-pressed',on); b.textContent=on?'✅ I built it!':'☐ I built it!';
+        b.closest('.vcard').classList.toggle('done',on);
+      });
+      document.getElementById('plabel').textContent=`🏆 I built ${built.size} of ${total} — keep going, Nick!`;
+      document.getElementById('pfill').style.width=(built.size/total*100)+'%';
+    }
+    document.querySelectorAll('.built').forEach(b=>b.addEventListener('click',()=>{
+      built.has(b.dataset.vid)?built.delete(b.dataset.vid):built.add(b.dataset.vid);
+      localStorage.setItem(KEY,JSON.stringify([...built])); render();
+    }));
+    render();
+    const q=document.getElementById('q');
+    q.addEventListener('input',()=>{
+      const s=q.value.trim().toLowerCase(); let any=false;
+      document.querySelectorAll('.vcard').forEach(c=>{
+        const hit=!s||c.dataset.title.includes(s); c.classList.toggle('hidden',!hit); if(hit)any=true;
+      });
+      document.querySelectorAll('section').forEach(sec=>{
+        const vis=sec.querySelectorAll('.vcard:not(.hidden)').length;
+        sec.classList.toggle('hidden',vis===0);
+      });
+      document.getElementById('noresults').style.display=any?'none':'block';
+    });
+</script>
+</body>
+</html>
